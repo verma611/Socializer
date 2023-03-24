@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\jvjay\Desktop\SocialMedia Django App\env
+set VIRTUAL_ENV=C:\Users\jvjay\OneDrive\Desktop\Socializer-1.0-main\env
 
 if not defined PROMPT set PROMPT=$P$G
 

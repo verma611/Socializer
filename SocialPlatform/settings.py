@@ -16,9 +16,6 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
@@ -26,7 +23,7 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760
 SECRET_KEY = 'django-insecure-aca075^80zp*6jvzm0q@87pi2q%j7n=fz&uoq-kc@udad+j-(2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 
 LOGIN_URL = 'users:login'
@@ -34,7 +31,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 ALLOWED_HOSTS = [
-    #'https://verma611-crispy-enigma-7xj5x9g7xp2pr79-8000.preview.app.github.dev', 'localhost'
+    'https://socializernow.azurewebsites.net/'
     ]
 CSRF_COOKIE_SECURE = True
 
@@ -89,7 +86,7 @@ WSGI_APPLICATION = 'SocialPlatform.wsgi.application'
 
 
 CSRF_TRUSTED_ORIGINS = [
-    #'https://verma611-crispy-enigma-7xj5x9g7xp2pr79-8000.preview.app.github.dev'
+    'https://socializernow.azurewebsites.net'
     ]
 
 # Database
