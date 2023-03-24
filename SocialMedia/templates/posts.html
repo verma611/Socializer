@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+{% block title %}
+    Home Page
+{% endblock %}
+{% block content %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+
+function likePost(pk) {
+  fetch('/like_post/' + pk, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': document.querySelector('input[name=csrfmiddlewaretoken]').value
+    },
+    body: JSON.stringify({'pk': pk})
+  })
+  .then(response => {
+    if (response.ok) {
+      response.json().then(data => {
+        const likesCount = data.likes;
+        const likesButton = document.querySelector(`.like-btn[data-pk="${pk}"]`);
+        likesButton.innerHTML = `<span>&#x1F44D;</span> Likes: ${likesCount}`;
+      });
+    } else {
+      console.error(response.statusText);
+    }
+  })
+  .catch(error => {
+    console.error(error);
+  });
+
+  event.preventDefault();
+}
+
+function dislikePost(pk) {
+  fetch('/dislike_post/' + pk, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': document.querySelector('input[name=csrfmiddlewaretoken]').value
+    },
+    body: JSON.stringify({'pk': pk})
+  })
+  .then(response => {
+    if (response.ok) {
+      response.json().then(data => {
+        const dislikesCount = data.dislikes;
+        const dislikesButton = document.querySelector(`.dislike-btn[data-pk="${pk}"]`);
+        dislikesButton.innerHTML = `<span>&#x1F44E;</span> Dislikes: ${dislikesCount}`;
+      });
+    } else {
+      console.error(response.statusText);
+    }
+  })
+  .catch(error => {
+    console.error(error);
+  });
+
+  event.preventDefault();
+}
+
+
+
+
+</script>
+
+
+
+
+<style>
+
+    .make_font_black{
+        color: #212121;
+    }
+
+    .btn-outline-secondary.btn-success {
+        background-color: #fff;
+        border-color: #6c757d;
+        color: #6c757d;
+    }
+
+    .btn-outline-secondary.btn-success:hover {
+        background-color: #28a745;
+        border-color: #28a745;
+        color: #fff;
+    }
+
+    .btn-outline-secondary.btn-danger {
+        background-color: #fff;
+        border-color: #6c757d;
+        color: #6c757d;
+    }
+
+    .btn-outline-secondary.btn-danger:hover {
+        background-color: #dc3545;
+        border-color: #dc3545;
+        color: #fff;
+    }
+
+    .increase_spacing{
+      margin: 10px;
+    }
+
+            
+
+ </style>
+
+<br/>
+
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-md-8 col-sm-10">
+      <form class="d-flex" action="{% url 'search_posts' %}">
+        <div class="input-group">
+          <input type="text" name="q" placeholder="Search For Posts By Author, Content, Date, Title" class="form-control" style="width: 80%;">
+          <button type="submit" class="btn btn-outline-success">Search</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="container my-4">
+
+    <div class="row justify-content-center">
+        {% for post in posts %}
+        <div class="col-lg-8">
+            <br>
+            <div class="card mb-4 make_font_black">
+
+                  {% for image in post.images.all %}
+                    <img class="card-img-top" src="{{ image.image.url }}" alt="{{ post.title }}" width="600px" height="600px">
+
+                  {% endfor %}
+                  
+                {% if post.video %}
+                <div class="embed-responsive embed-responsive-16by9">
+                    <video class="embed-responsive-item" src="{{ post.video.url }}" controls></video>
+                </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ post.title }}</h5>
+                    <p class="card-text">{{ post.text }}</p>
+                    <p class="card-text"><small class="text-muted">Posted by <a href="#">{{ post.author.username }}</a> on {{ post.created_date|date:"F j, Y" }}</small></p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                            <form method="POST" action="">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-outline-secondary btn-success like-btn" onclick="likePost('{{ post.pk }}')" data-pk="{{ post.pk }}">
+                                    <span>&#x1F44D;</span> Likes: {{ post.likes }}<span ></span>
+                                </button>
+                            </form>
+
+                            <form method="POST" action="">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-sm btn-outline-secondary btn-danger dislike-btn" onclick="dislikePost('{{ post.pk }}')" data-pk="{{ post.pk }}">
+                                    <span>&#x1F44E;</span> Dislikes: {{ post.dislikes }}<span ></span>
+                                </button>
+                            </form>
+
+                            <a href="{% url 'post_detail' post.pk %}" class="btn btn-sm btn-outline-secondary">Comments</a>
+                        </div>
+                    </div>
+                </div>
+                <br>
+            </div>
+        </div>
+        {% empty %}
+          <h1 style="text-align: center;">No Results Found :(</h1>
+          <button type="submit" class="btn btn-xs btn-danger" style="padding: 5px 10px; font-size: 12px; width: 100px;" onclick="location.href='{% url 'ShowAllPosts' %}'">Go Back To All Posts</button>
+        {% endfor %}
+    </div>
+    
+    <div class="pagination justify-content-center">
+      <ul class="pagination">
+        {% if page_obj.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page=1" aria-label="First">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+              <span aria-hidden="true">&lsaquo;</span>
+            </a>
+          </li>
+        {% endif %}
+    
+        <li class="page-item disabled">
+          <a class="page-link" href="#">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+          </a>
+        </li>
+    
+        {% if page_obj.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+              <span aria-hidden="true">&rsaquo;</span>
+            </a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+    
+</div>
+
+
+
+{% endblock %}

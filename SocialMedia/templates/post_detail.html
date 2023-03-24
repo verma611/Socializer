@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+
+  .make_dark_text{
+    color: #212121;
+  }
+
+</style>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+      <h2>{{ post.title }}</h2>
+      <p>{{ post.text }}</p>
+
+      
+        {% for image in post.images.all %}
+          <img src="{{ image.image.url }}" class="img-fluid" alt="Post image" height="500px" width="500px">
+        {% endfor %}
+      
+      
+      {% if post.video %}
+      <video src="{{ post.video.url }}" class="img-fluid" controls width="500px" height="500px"></video>
+      {% endif %}
+
+      <hr>
+
+      <h4>Leave a Comment:</h4>
+      <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+          <textarea class="form-control" rows="3" name="text"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Comment</button>
+      </form>
+
+    </div>
+    <div class="col-md-4">
+      <h4>Comments ({{ comments.count }})</h4>
+      {% for comment in comments %}
+      <div class="card mb-3">
+        <div class="card-header">
+          <span class="text-muted"><a href="#">{{ comment.author.username }}</a></span> <span class="text-muted">commented on {{ comment.created_date|date:"F d, Y" }}</span>
+        </div>
+        <div class="card-body">
+          <p class="card-text make_dark_text">{{ comment.text }}</p>
+        </div>
+      </div>
+      {% empty %}
+      <p>No comments yet.</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}

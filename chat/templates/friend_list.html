@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<head>
+  <script>
+    /*
+document.addEventListener('DOMContentLoaded', function() {
+  // Add click event listener to all friend links
+  var friendLinks = document.querySelectorAll('.friend-link');
+  friendLinks.forEach(function(friendLink) {
+    friendLink.addEventListener('click', function(e) {
+      e.preventDefault();
+      hello(); // Call the hello function
+      var friendId = this.dataset.friendId;
+      fetch(`/chat/chat_history/${friendId}`)
+        .then(function(response) {
+          return response.text();
+          e.preventDefault()
+        })
+        .then(function(html) {
+          var chatHistoryContainer = document.getElementById('chat-history-container');
+          chatHistoryContainer.innerHTML = html;
+          e.preventDefault()
+        })
+        .catch(function(error) {
+          console.error('Error fetching chat history:', error);
+        });
+    });
+  });
+
+  // Define the hello function
+  function hello() {
+    console.log("Hello is clicked");
+  }
+});
+*/
+
+  </script>
+
+
+
+</head>
+
+<div class="row">
+  <div class="col-md-4">
+    <h2>Friends:</h2>
+    <div class="friend-list-container">
+      <ul class="list-group">
+        {% for friend in friends %}
+        <a href="{% url 'chat_history' friend.id %}" class="friend-link">
+          <li class="list-group-item">
+            {% if friend.from_user == request.user %}
+              {{ friend.to_user.username }}
+            {% else %}
+              {{ friend.from_user.username }}
+            {% endif %}
+          </li>
+        </a>
+        {% empty %}
+        <p>No Friends Found</p>
+      {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="col-md-8">
+    <div id="chat-history-container"></div>
+  </div>
+</div>
+
+<style>
+
+
+  a.friend-link {
+    text-decoration: none;
+  }
+
+  .list-group-item-smaller {
+  height: 30px;
+  padding: 5px 10px;
+}
+
+li:hover{
+  background-color: rgb(186, 184, 184);
+}
+</style>
+  
+
+{% endblock %}

@@ -1,0 +1,173 @@
+{% extends 'friend_list.html' %}
+
+{% block content %}
+
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<!-- jQuery and Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+<style>
+  /* Style for the message containers */
+  .message-container-right {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-start;
+    margin-bottom: 5px;
+  }
+  
+  .message-container-left {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    margin-bottom: 5px;
+  }
+  
+  /* Style for the message boxes */
+  .message-right {
+    background-color: #F0F0F0;
+    border-radius: 10px 10px 0 10px;
+    padding: 10px;
+    max-width: 70%;
+  }
+  
+  .message-left {
+    background-color: #d7d6d4;
+    border-radius: 10px 10px 10px 0;
+    padding: 10px;
+    max-width: 70%;
+  }
+  
+  /* Style for the send message form */
+  #send-message-form {
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+  }
+  
+  #message {
+    border-radius: 10px 0 0 10px;
+  }
+  
+  /* Style for the message container 
+  
+  action="{% url 'send_message' friend.id %}"
+  */
+  #message-container {
+    overflow-y: scroll;
+    max-height: 300px;
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px #B9B9B9;
+  }
+
+  .make_black{
+    color: #212121;
+  }
+</style>
+
+<head>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const sendMessageForm = document.getElementById('send-message-form');
+  const messageContainer = document.getElementById('message-container');
+
+  sendMessageForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const messageInput = document.getElementById('message');
+    const message = messageInput.value;
+    const friendId = document.querySelector('#send-message-btn').getAttribute('data-friend-id');
+
+    fetch('/chat/send_message/' + "{{ friend.id }}", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': '{{ csrf_token }}'
+      },
+      body: JSON.stringify({'message': message })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        messageInput.value = '';
+        // do something else after successfully sending the message
+        let messagesHtml = '';
+        data.messages.forEach(message => {
+          messagesHtml += `
+            <div class="${message.is_sender ? 'message-container-right' : 'message-container-left'}">
+              <div class="${message.is_sender ? 'message-right' : 'message-left'}">
+                <p class="make_black">${message.content}</p>
+                <small class="text-muted">${message.timestamp}</small>
+              </div>
+            </div>
+          `;
+        });
+        messageContainer.innerHTML = messagesHtml;
+        messageContainer.scrollTop = messageContainer.scrollHeight;
+      } else {
+        console.log('Error sending message');
+      }
+    })
+    .catch(error => console.error(error));
+  });
+});
+</script>
+
+</head>
+
+<br>
+<a href="{% url 'friend_list' %}"><button class="btn btn-primary">Go back to all chats</button></a>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      {% if friend.to_user != user %}
+      <h2>{{ friend.to_user.username }}</h2>
+    {% else %}
+      <h2>{{ friend.from_user.username }}</h2>
+    {% endif %}
+      <div id="message-container" style="height: 300px; overflow-y: scroll;">
+        {% for message in messages %}
+        {% if message.is_current_user %}
+          <div class="message-container-right">
+            <div class="message-right">
+              <p class="make_black">{{ message.content }}</p>
+              <small class="text-muted">{{ message.timestamp }}</small>
+            </div>
+          </div>
+        {% else %}
+          <div class="message-container-left">
+            <div class="message-left">
+              <p class="make_black">{{ message.content }}</p>
+              <small class="text-muted">{{ message.timestamp }}</small>
+            </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+      </div>
+      <form id="send-message-form" class="mt-3" method="POST">
+        {% csrf_token %}
+        <div class="input-group">
+          <input type="text" class="form-control" id="message" name="message" placeholder="Type your message">
+          <div class="input-group-append">
+            <button type="submit" id="send-message-btn" class="btn btn-primary" data-friend-id="{{ friend.id }}">Send</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+{% endblock %}
+

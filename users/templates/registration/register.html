@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block content %}
+<style>
+    .make_center{
+        text-align: center;
+    }
+</style>
+
+    <main role="main" class="container">
+        <div class="pb-2 mb-2 border-bottom text-center">
+            <h2>Resgister To Make A New Acount</h2>
+        </div>
+        <div>
+            <form id="login-form" class="form" action="{% url 'users:register' %}" method="post" id="form">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                {% buttons %}
+                <button name="submit" class="btn btn-primary">Log in</button>
+                {% endbuttons %}
+                <input type="hidden" name="next" value="#" />
+            </form>
+         </div>
+    </main>
+    <a href= "{% url 'users:Licence' %}"><p type="button" class="make_center">By Signing Up I accept All the Terms and Policies</p></a>
+    <a href= "{% url 'users:login' %}"><p type="button" class="make_center">Take Me To Login Page</p></a>
+    
+
+
+{% endblock %}

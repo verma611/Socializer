@@ -1,0 +1,36 @@
+* = May not be needed
+
+Current version 1.0:{
+    Chat
+    upload photos
+    like posts
+    upload images
+    upload videos
+    add friends
+}
+
+Future version 2.0:{
+
+    marketplace
+    allow users to uplaod videos and photos in the Chat
+    make the desgin of the website better:{
+        dark mode and light mode,
+        better gui,
+        cleaner desgin
+    }
+    allow video calls and normal calls
+    allow group chats
+
+    increase performance:{
+        more db servers,
+        more locations that the dbs exist in,
+        automatically connet users to a database,
+        have a seprate machine to sync all the dbs to the same changes,
+        download the bootstrap,
+        use mangodb if needed*
+    }
+
+    make system more efficent:{
+        use azure to upload images to,
+    }
+}

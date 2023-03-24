@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% block content %}
+
+{% block page_header %}
+ 
+{% endblock page_header %}
+
+<style>
+    .make_center{
+        text-align: center;
+    }
+</style>
+
+<main role="main" class="container">
+    <div class="pb-2 mb-2 border-bottom text-center">
+        <h2>Log In To An Existing Account</h2>
+    </div>
+    <div>
+        <form id="login-form" class="form" action="{% url 'users:login' %}" method="post" id="form">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            {% buttons %}
+            <button name="submit" class="btn btn-primary">Log in</button>
+            {% endbuttons %}
+            <input type="hidden" name="next" value="{% url 'HomePage' %}" />
+        </form>
+     </div>
+     <a href= "{% url 'users:register' %}"><p type="button" class="make_center">Take Me To Sign Up Page</p></a>
+     
+
+</main>
+
+
+
+
+{% endblock %}
