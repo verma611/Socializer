@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-aca075^80zp*6jvzm0q@87pi2q%j7n=fz&uoq-kc@udad+j-(2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 
 LOGIN_URL = 'users:login'
@@ -31,7 +31,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 ALLOWED_HOSTS = [
-    'https://socializernow.azurewebsites.net/'
+    'socializernow.azurewebsites.net'
+    
     ]
 CSRF_COOKIE_SECURE = True
 
