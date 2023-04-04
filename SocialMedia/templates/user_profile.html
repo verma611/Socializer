@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+
+
+{% block content %}
+<style>
+    .center_user_name{
+        text-align: center;
+    }
+</style>
+
+<h1 class="center_user_name">{{ CurrentUser.username }}</h1>
+
+<br>
+<br>
+
+<form method="post" action="{% url 'add_friend' CurrentUser.id  %}">
+    {% csrf_token %}
+    <button class="btn btn-primary">Add {{ CurrentUser.username }} to friend list</button>
+</form>
+<br>
+<br>
+
+<hr class="divider">
+<br>
+<h5>Top Posts Made By {{ CurrentUser.username }}:</h5>
+<table class="table table-hover table-dark">
+    <thead>
+        <tr>
+            <!-- Your Columns HERE -->
+            <th scope="col">Title</th>
+            <th scope="col">Likes</th>
+            <th scope="col">Dislikes</th>
+            <th scope="col">Date Posted</th>
+            <th scope="col">Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Your rows inside the table HERE: -->
+        {% for item in posts %}
+            <tr>
+                <td>{{ item.title }}</td>
+                <td>{{ item.likes }}</td>
+                <td>{{ item.dislikes }}</td>
+                <td>{{ item.created_date }}</td>
+                <td>
+                    <form action="{% url 'post_detail' item.id %}" method="get">
+                        <button class="btn btn-outline btn-info">More Info</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
+
+

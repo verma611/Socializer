@@ -1,6 +1,6 @@
 import cv2
 import os
-from .models import Post, Comment, Image
+from .models import Post, Comment, Image, User
 from django.shortcuts import get_object_or_404
 from .forms import PostForm, CommentForm
 from django.shortcuts import render, redirect
@@ -156,4 +156,8 @@ def user_profile_settings(request):
     return render(request, 'settings.html')
 
 def view_user_profile(request, pk):
-    return render(request, 'user_profile.html')
+    user = get_object_or_404(User, pk=pk)
+    Posts = Post.objects.filter(author=user).order_by('-likes')[:5]
+
+    context = {"CurrentUser": user, "posts": Posts}
+    return render(request, 'user_profile.html', context=context)

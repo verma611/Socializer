@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 import json
 from .models import Friend, Message
 from django.contrib.auth.decorators import login_required
@@ -78,3 +78,13 @@ def send_message(request, friend_id):
 
 def chat_home(request):
     return render(request, "chat.html")
+
+def add_friend(request, pk):
+    friend = get_object_or_404(User, pk=pk)
+    if request.method == 'POST':
+        if request.user != friend:
+            friend_obj = Friend(from_user=request.user, to_user=friend)
+            friend_obj.save()
+            return redirect('chat_history', friend_id=pk)
+    return redirect('view_user_profile', pk=pk)
+    

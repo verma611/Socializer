@@ -7,5 +7,6 @@ from . import views
 urlpatterns = [
         path('friends', views.friend_list, name='friend_list'),
         path('chat_history/<int:friend_id>', views.chat_history, name='chat_history'),
-        path('send_message/<int:friend_id>', views.send_message, name='send_message')
+        path('send_message/<int:friend_id>', views.send_message, name='send_message'),
+        path('add_friend/<int:pk>', views.add_friend, name='add_friend'),
 ]
