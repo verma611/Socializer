@@ -1,3 +1,5 @@
+import cv2
+import os
 from .models import Post, Comment, Image
 from django.shortcuts import get_object_or_404
 from .forms import PostForm, CommentForm
@@ -7,6 +9,10 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.conf import settings
+import numpy as np
+
+
 
 
 def HomePage(request):
@@ -50,10 +56,25 @@ def new_post(request):
             post = form.save(commit=False)
             post.author = request.user
             post.save()
+            
             images = request.FILES.getlist('images')
             for img in images:
-                image = Image(post=post, image=img)
-                image.save()
+                # Save the image to a temporary file
+                file_path = os.path.join(settings.MEDIA_ROOT, 'temp', img.name)
+                with open(file_path, 'wb') as f:
+                    for chunk in img.chunks():
+                        f.write(chunk)
+
+                image = cv2.imread(file_path)
+                resized_image = cv2.resize(image, (600, 600), interpolation=cv2.INTER_AREA)
+  
+                image_name = img.name.split('.')[0] + '_resized.jpg'
+                image_path = os.path.join(settings.MEDIA_ROOT, 'images', image_name)
+                cv2.imwrite(image_path, resized_image, [int(cv2.IMWRITE_JPEG_QUALITY), 80])
+                image_obj = Image(post=post, image='images/' + image_name)
+                image_obj.save()
+                os.remove(file_path)
+            
             return redirect('post_detail', pk=post.pk)
     else:
         form = PostForm()
@@ -129,3 +150,10 @@ def edit_post(request, pk):
     else:
         form = PostForm(instance=post)
     return render(request, 'edit_post.html', {'form': form})
+
+def user_profile_settings(request):
+
+    return render(request, 'settings.html')
+
+def view_user_profile(request, pk):
+    return render(request, 'user_profile.html')

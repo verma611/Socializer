@@ -31,7 +31,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 ALLOWED_HOSTS = [
-    'socializernow.azurewebsites.net'
+    #'socializernow.azurewebsites.net'
     
     ]
 CSRF_COOKIE_SECURE = True
@@ -47,11 +47,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    #Custom apps
+    #Third party apps
     'SocialMedia',
     'users',
     'bootstrap4',
-    'chat'
+    'chat',
+    'channels'
 ]
 
 MIDDLEWARE = [
@@ -87,7 +88,7 @@ WSGI_APPLICATION = 'SocialPlatform.wsgi.application'
 
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://socializernow.azurewebsites.net'
+    #'https://socializernow.azurewebsites.net'
     ]
 
 # Database
@@ -96,10 +97,10 @@ CSRF_TRUSTED_ORIGINS = [
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'SocialMedia',
+        'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': '112233',
-        'HOST': '20.106.127.98',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }

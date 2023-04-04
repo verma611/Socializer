@@ -70,6 +70,7 @@ function dislikePost(pk) {
 
 
 
+
 <style>
 
     .make_font_black{
@@ -134,11 +135,11 @@ function dislikePost(pk) {
             <br>
             <div class="card mb-4 make_font_black">
 
-                  {% for image in post.images.all %}
-                    <img class="card-img-top" src="{{ image.image.url }}" alt="{{ post.title }}" width="600px" height="600px">
+              {% for image in post.images.all %}
+              <img class="card-img-top" src="{{ image.image.url }}" alt="{{ post.title }}" width="600px" height="600px">
 
-                  {% endfor %}
-                  
+            {% endfor %}
+            
                 {% if post.video %}
                 <div class="embed-responsive embed-responsive-16by9">
                     <video class="embed-responsive-item" src="{{ post.video.url }}" controls></video>

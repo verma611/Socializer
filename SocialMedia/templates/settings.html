@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+
+
+{% block content %}
+
+
+    <br>
+    <br>
+    <p>Navigation Around Socializer:</p>
+    <a href="{% url 'my_posts' %}"><button class="btn btn-primary">See All My Previous Posts</button></a>
+    <br>
+    <br>
+    <a href="{% url 'friend_list' %}"><button class="btn btn-primary">Go To All My Friends List</button></a>
+    <br>
+    <br>
+
+    <p>Unsafe Actions:</p>
+    <form method="post" action="">
+        {% csrf_token %}
+        <a href="{% url 'friend_list' %}"><button class="btn btn-danger">Delete This Account</button></a>
+    </form>
+    <br>
+    <form method="post" action="">
+        {% csrf_token %}
+        <a href="{% url 'friend_list' %}"><button class="btn btn-warning">Change My User Name</button></a>
+    </form>
+    <br>
+    <form method="post" action="">
+        {% csrf_token %}
+        <a href="{% url 'friend_list' %}"><button class="btn btn-warning">Change My Account Password</button></a>
+    </form>
+    
+    
+
+{% endblock %}
+
+
