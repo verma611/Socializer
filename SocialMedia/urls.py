@@ -17,4 +17,5 @@ urlpatterns = [
     path('edit_post/<int:pk>/', views.edit_post, name="edit_post"),
     path('settings/', views.user_profile_settings, name="user_profile_settings"),
     path('view_user_profile/<int:pk>/', views.view_user_profile, name="view_user_profile"),
+    path('delete_user_account/<int:pk>/', views.delete_user_account, name="delete_user_account"),
 ]

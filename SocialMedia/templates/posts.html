@@ -172,12 +172,15 @@ function dislikePost(pk) {
                 <br>
             </div>
         </div>
+        <br>
         {% empty %}
+          <br>
           <h1 style="text-align: center;">No Results Found :(</h1>
           <button type="submit" class="btn btn-xs btn-danger" style="padding: 5px 10px; font-size: 12px; width: 100px;" onclick="location.href='{% url 'ShowAllPosts' %}'">Go Back To All Posts</button>
+          <br>
         {% endfor %}
     </div>
-    
+    <br>
     <div class="pagination justify-content-center">
       <ul class="pagination">
         {% if page_obj.has_previous %}

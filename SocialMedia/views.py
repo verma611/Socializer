@@ -10,7 +10,7 @@ from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.conf import settings
-import numpy as np
+
 
 
 
@@ -18,7 +18,7 @@ import numpy as np
 def HomePage(request):
     return render(request, 'index.html')
 
-
+@login_required
 def ShowAllPosts(request):
     post_list = Post.objects.all()
 
@@ -33,6 +33,7 @@ def ShowAllPosts(request):
 
     return render(request, 'posts.html', context)
 
+@login_required
 def search_posts(request):
     query = request.GET.get('q')
     post_list = Post.objects.none()
@@ -140,6 +141,7 @@ def delete_a_post(request, pk):
             return redirect('my_posts')
     return redirect('my_posts')
 
+@login_required
 def edit_post(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == 'POST':
@@ -151,13 +153,25 @@ def edit_post(request, pk):
         form = PostForm(instance=post)
     return render(request, 'edit_post.html', {'form': form})
 
+@login_required
 def user_profile_settings(request):
 
     return render(request, 'settings.html')
 
+@login_required
 def view_user_profile(request, pk):
     user = get_object_or_404(User, pk=pk)
     Posts = Post.objects.filter(author=user).order_by('-likes')[:5]
 
     context = {"CurrentUser": user, "posts": Posts}
     return render(request, 'user_profile.html', context=context)
+
+@login_required
+def delete_user_account(request, pk):
+    if request.method == 'POST':
+        if request.user == get_object_or_404(User, pk=pk):
+            user = get_object_or_404(User, pk=pk)
+            user.delete()
+            return redirect('HomePage')
+        
+

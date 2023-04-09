@@ -1,15 +1,14 @@
+
 from django.shortcuts import render, get_object_or_404, redirect
 import json
 from .models import Friend, Message
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 from django.utils.timezone import localtime
-
-
 from django.db.models import Q
+
 
 
 @login_required
@@ -21,7 +20,6 @@ def friend_list(request):
 @login_required
 def chat_history(request, friend_id):
     friend = get_object_or_404(Friend ,pk=friend_id)
-    print(friend)
 
     messages = Message.objects.filter(
         Q(sender=friend.from_user, receiver=friend.to_user) | Q(sender=friend.to_user, receiver=friend.from_user)
@@ -84,6 +82,7 @@ def add_friend(request, pk):
     if request.method == 'POST':
         if request.user != friend:
             friend_obj = Friend(from_user=request.user, to_user=friend)
+            friend_obj.clean()
             friend_obj.save()
             return redirect('chat_history', friend_id=pk)
     return redirect('view_user_profile', pk=pk)

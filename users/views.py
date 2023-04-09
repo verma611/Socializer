@@ -18,3 +18,7 @@ def register(request):
 def Licence(request):
 
     return render(request, 'registration/licence.html')
+
+def logout(request):
+
+    return render(request, 'registration/logout.html')

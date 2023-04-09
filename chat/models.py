@@ -18,6 +18,10 @@ class Friend(models.Model):
             'to_user': self.to_user.username,
         }
     
+    def clean(self):
+        if self.from_user == self.to_user:
+            raise ValidationError("A user cannot friend themselves.")
+    
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=['from_user', 'to_user'], name='unique_friend')

@@ -5,6 +5,13 @@
 
 {% block content %}
 
+<style>
+    .center_name{
+        text-align: center;
+    }
+</style>
+    <h1 class="center_name">{{ user.username }}</h1>
+
 
     <br>
     <br>
@@ -17,9 +24,9 @@
     <br>
 
     <p>Unsafe Actions:</p>
-    <form method="post" action="">
+    <form method="post" action="{% url 'delete_user_account' user.pk %}">
         {% csrf_token %}
-        <a href="{% url 'friend_list' %}"><button class="btn btn-danger">Delete This Account</button></a>
+        <button class="btn btn-danger">Delete This Account</button>
     </form>
     <br>
     <form method="post" action="">
