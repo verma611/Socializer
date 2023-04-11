@@ -11,10 +11,6 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.conf import settings
 
-
-
-
-
 def HomePage(request):
     return render(request, 'index.html')
 

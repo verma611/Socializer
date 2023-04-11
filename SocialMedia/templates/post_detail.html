@@ -2,11 +2,104 @@
 
 {% block content %}
 
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+
+function likePost(pk) {
+  fetch('/like_post/' + pk, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': document.querySelector('input[name=csrfmiddlewaretoken]').value
+    },
+    body: JSON.stringify({'pk': pk})
+  })
+  .then(response => {
+    if (response.ok) {
+      response.json().then(data => {
+        const likesCount = data.likes;
+        const likesButton = document.querySelector(`.like-btn[data-pk="${pk}"]`);
+        likesButton.innerHTML = `<span>&#x1F44D;</span> Likes: ${likesCount}`;
+      });
+    } else {
+      console.error(response.statusText);
+    }
+  })
+  .catch(error => {
+    console.error(error);
+  });
+
+  event.preventDefault();
+}
+
+function dislikePost(pk) {
+  fetch('/dislike_post/' + pk, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': document.querySelector('input[name=csrfmiddlewaretoken]').value
+    },
+    body: JSON.stringify({'pk': pk})
+  })
+  .then(response => {
+    if (response.ok) {
+      response.json().then(data => {
+        const dislikesCount = data.dislikes;
+        const dislikesButton = document.querySelector(`.dislike-btn[data-pk="${pk}"]`);
+        dislikesButton.innerHTML = `<span>&#x1F44E;</span> Dislikes: ${dislikesCount}`;
+      });
+    } else {
+      console.error(response.statusText);
+    }
+  })
+  .catch(error => {
+    console.error(error);
+  });
+
+  event.preventDefault();
+}
+
+</script>
+
 <style>
 
   .make_dark_text{
     color: #212121;
   }
+
+  .make_font_black{
+        color: #212121;
+    }
+
+    .btn-outline-secondary.btn-success {
+        background-color: #fff;
+        border-color: #6c757d;
+        color: #6c757d;
+    }
+
+    .btn-outline-secondary.btn-success:hover {
+        background-color: #28a745;
+        border-color: #28a745;
+        color: #fff;
+    }
+
+    .btn-outline-secondary.btn-danger {
+        background-color: #fff;
+        border-color: #6c757d;
+        color: #6c757d;
+    }
+
+    .btn-outline-secondary.btn-danger:hover {
+        background-color: #dc3545;
+        border-color: #dc3545;
+        color: #fff;
+    }
+
+    .increase_spacing{
+      margin: 10px;
+    }
 
 </style>
 
@@ -26,7 +119,26 @@
       <video src="{{ post.video.url }}" class="img-fluid" controls width="500px" height="500px"></video>
       {% endif %}
 
+      <div class="btn-group"> 
+        <form method="POST" action="">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-outline-secondary btn-success like-btn" onclick="likePost('{{ post.pk }}')" data-pk="{{ post.pk }}">
+                <span>&#x1F44D;</span> Likes: {{ post.likes }}<span ></span>
+            </button>
+        </form>
+
+        <form method="POST" action="">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-outline-secondary btn-danger dislike-btn" onclick="dislikePost('{{ post.pk }}')" data-pk="{{ post.pk }}">
+                <span>&#x1F44E;</span> Dislikes: {{ post.dislikes }}<span ></span>
+            </button>
+        </form>
+
+      </div>
+
       <hr>
+
+      
 
       <h4>Leave a Comment:</h4>
       <form method="post">

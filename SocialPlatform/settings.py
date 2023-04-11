@@ -53,7 +53,6 @@ INSTALLED_APPS = [
     'users',
     'bootstrap4',
     'chat',
-    'channels'
 ]
 
 MIDDLEWARE = [

@@ -86,4 +86,6 @@ def add_friend(request, pk):
             friend_obj.save()
             return redirect('chat_history', friend_id=pk)
     return redirect('view_user_profile', pk=pk)
-    
+
+def delete_friend(request, friend_id):
+    pass

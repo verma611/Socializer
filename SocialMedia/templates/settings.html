@@ -1,42 +1,67 @@
 {% extends 'base.html' %}
 {% load bootstrap4 %}
 
-
-
 {% block content %}
 
 <style>
     .center_name{
         text-align: center;
     }
+
+    .center_items{
+        text-align: center;
+        align-items: center;
+        align-content: center;
+    }
+
+    a.d-block button.btn-primary {
+    margin: 0 auto;
+    display: block;
+    }
 </style>
     <h1 class="center_name">{{ user.username }}</h1>
 
+    <br>
+    <p class="center_name">
+        Navagiation arround Socailizer:
+    </p>
+
+
 
     <br>
+    <a href="{% url 'my_posts' %}" class="d-block">
+        <button class="btn btn-primary">See All My Previous Posts</button>
+    </a>
     <br>
-    <p>Navigation Around Socializer:</p>
-    <a href="{% url 'my_posts' %}"><button class="btn btn-primary">See All My Previous Posts</button></a>
     <br>
-    <br>
-    <a href="{% url 'friend_list' %}"><button class="btn btn-primary">Go To All My Friends List</button></a>
+    <a href="{% url 'friend_list' %}" class="d-block"><button class="btn btn-primary">Go To All My Friends List</button></a>
     <br>
     <br>
 
-    <p>Unsafe Actions:</p>
-    <form method="post" action="{% url 'delete_user_account' user.pk %}">
-        {% csrf_token %}
-        <button class="btn btn-danger">Delete This Account</button>
-    </form>
+    <p class="center_items">Unsafe Actions:</p>
+
+
     <br>
-    <form method="post" action="">
+
+
+    <form method="post" action="" class="center_items">
         {% csrf_token %}
-        <a href="{% url 'friend_list' %}"><button class="btn btn-warning">Change My User Name</button></a>
+        <a href="{% url 'friend_list' %}"><button class="btn btn-warning">Change My Account Username</button></a>
     </form>
+
+
     <br>
-    <form method="post" action="">
+
+    <form method="post" action="" class="center_items">
         {% csrf_token %}
         <a href="{% url 'friend_list' %}"><button class="btn btn-warning">Change My Account Password</button></a>
+    </form>
+
+    <br>
+
+    <form method="post" action="{% url 'delete_user_account' user.pk %}" class="center_items">
+        {% csrf_token %}
+        <button class="btn btn-danger">Permantly Delete This Account</button>
     </form>
     
     
