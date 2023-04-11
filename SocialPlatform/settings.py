@@ -32,8 +32,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 ALLOWED_HOSTS = [
-    #'socializernow.azurewebsites.net'
-    
+
     ]
 CSRF_COOKIE_SECURE = True
 
@@ -88,7 +87,8 @@ WSGI_APPLICATION = 'SocialPlatform.wsgi.application'
 
 
 CSRF_TRUSTED_ORIGINS = [
-    #'https://socializernow.azurewebsites.net'
+
+
     ]
 
 # Database
